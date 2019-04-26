@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script src="js/singer.js">
+    </script>
+  </head>
+  <body>
+  <button type="button" id="openCreateRelease">Go create release</button>
+  <div class="" id="createRelease" style="display: none;">
+    <button type="button" id="closeCreateRelease">X</button><br>
+    <div id="authors">
+      <div id="authorsRelease">
+        Authors: I
+      </div>
+
+    <input type="text" id="searchField">
+    <button type="button" id="search">Search</button>
+    <input type="radio" class="radio" name="choose" checked>Choose autors of release
+    <span class="radioBox">
+      <input type="radio" class="radio" name="choose"> 1 loaded
+    </span>
+    </div>
+    <ul id="singers">
+
+    </ul>
+    <button type="button" name="button" id="more" style="display: none;">More</button><br>
+    Name of release:<br>
+    <input type="text" id="nameRelease"><br>
+    Image:
+    <input type="file" id="image">
+    <ul id="songs">
+      1 loaded
+      <li class="song">
+        Name of song:
+        <input type="text" class="nameSong">
+        Number of song:
+        <input type="text" class="numberSong">
+        <input type="file" class="songFile">
+        <div class="authors">
+          Authors: I
+        </div>
+      </li>
+    </ul>
+    <button type="button" id="addSong">Add Song</button><br>
+    <button type="button" id="load">Load release</button>
+  </div>
+  <button type="button" id="logout">Logout</button>
+
+
+  </body>
+</html>
