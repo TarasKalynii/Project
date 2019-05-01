@@ -22,7 +22,13 @@ function checkingSession(req, res, next) {
     res.redirect('/adminpage');
   }else {
     if (req.session.user_id) {
-      next();
+      User.findById(req.session.user_id, function (err, doc){
+        if (doc.type == 'singer') {
+          res.redirect('/singerpage');
+        }else {
+          next();
+        }
+    });
     }
     else {
       res.redirect('/login');
@@ -39,6 +45,20 @@ function checkingSessionAdmin(req, res, next) {
   }
 }
 
+function checkingSessionSinger(req, res, next) {
+  if (req.session.user_id) {
+    User.findById(req.session.user_id, function (err, doc){
+      if (doc.type == 'singer') {
+        next();
+      }else {
+        res.redirect('/login');
+      }
+  });
+}else {
+  res.redirect('/login');
+}
+}
+
 
 //express-session
 app.use(session({
@@ -51,6 +71,7 @@ const indexRouter = require('./routes');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 const singerRouter = require('./routes/singer');
+const listenerRouter = require('./routes/listener');
 
 
 const User = require('./models/user');
@@ -65,6 +86,7 @@ app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/admin', adminRouter);
 app.use('/singer', singerRouter);
+app.use('/listener', listenerRouter);
 
 
 
@@ -89,16 +111,16 @@ app.get('/login', function(req, res) {
     });
     res.render('login');
 });
-// profile page
-app.get('/profile',checkingSession, function(req, res) {
-    res.render('profile');
+// listener page
+app.get('/listenerpage',checkingSession, function(req, res) {
+    res.render('listenerpage');
 });
 // admin page
 app.get('/adminpage', checkingSessionAdmin, function(req, res) {
     res.render('adminpage');
 });
 // singer page
-app.get('/singerpage', function(req, res) {
+app.get('/singerpage', checkingSessionSinger, function(req, res) {
     res.render('singer');
 });
 

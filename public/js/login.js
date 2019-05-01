@@ -37,7 +37,7 @@ $(document).on('click', "#goLogin", function () {
       checking('#password', "password" === result, '<div class = "mistake" >Password is wrong. </div>');
       if (result != "email" && result != "password" && result != "error") {
         localStorage.setItem( "session", result );
-        window.location.href = '/profile';
+        window.location.href = '/listenerpage';
       }
     },
     error: function(){

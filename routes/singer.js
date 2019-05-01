@@ -48,9 +48,15 @@ router.get('/', function (req, res) {
 
 
 
+
+
+
 router.post('/', async function (req, res) {
   //log req
   //console.log(req.files);
+
+
+
   //createRelease
   var nameOfRelease = req.body.nameOfRelease;
   var autorsList = [];
@@ -80,8 +86,34 @@ router.post('/', async function (req, res) {
   sampleFile.mv('uploads/' + updateNewRelease._id + '/' + updateNewRelease._id + '.jpg', function(err) {
     if (err)
       return res.status(500).send(err);
-
   });
+
+
+  for (var i = 1; i < autorsList.length; i++) {
+    var updateAutor = await User.findOneAndUpdate(
+    { _id: autorsList[i] },
+    { $push: { releasesIds: newRelease._id   } }
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //create song
   var songsIds = [];
   var autorsForEverySong = [];
@@ -116,6 +148,15 @@ if (req.body.orderOfSongs.length == 1) {
   //with each or double my id NE DOPOMOGLO
   { songsIds:  songsIds }
   );
+  //add songsIds
+  for (var i = 1; i < autorsSongList.length; i++) {
+    var updateAutor = await User.findOneAndUpdate(
+    { _id: autorsSongList[i] },
+    { $push: { songsIds: updateNewSong._id   } }
+    );
+  }
+
+
 }else {
   for (var i = 0; i < req.body.orderOfSongs.length; i++) {
   Array.prototype.forEach.call(req.body.autorsForEverySong, function (arrayOfId) {
@@ -131,6 +172,10 @@ if (req.body.orderOfSongs.length == 1) {
   { _id: newSong._id },
   { $push: { autorsIds: autorsSongList  } }
   );
+
+
+
+
   //saveSong
   if (Object.keys(req.files).length == 0) {
     return res.status(400).send('No files were uploaded.');
@@ -146,18 +191,38 @@ if (req.body.orderOfSongs.length == 1) {
 
   });
   songsIds.push(updateNewSong._id);
+
 }
+
+
 var updateNewRelease = await Release.findOneAndUpdate(
 { _id: newRelease._id },
 //with each or double my id NE DOPOMOGLO
 { $push: { songsIds: { $each: songsIds }   } }
 );
+
+//addAutors for songs
+for (var j = 0; j < req.body.autorsForEverySong.length; j++) {
+  var songAutorsList = req.body.autorsForEverySong[j].split(',');
+for (var i = 1; i < songAutorsList.length; i++) {
+  var updateAutor = await User.findOneAndUpdate(
+  { _id: songAutorsList[i]},
+  { $push: { songsIds: songsIds[j]  } }
+  );
+}
+}
+
 }
 
 
   res.send('Files uploaded!');
-
 });
+
+
+
+
+
+
 
 // async function createRelease(fields) {
 //   var nameOfRelease = fields.nameOfRelease[0];

@@ -1,10 +1,29 @@
 var userList = { users : [], countOfLoaded : 10};
-var autors = ['5caf936b9ad545112b4b6258','5caf936b9ad545112b4b6258'];
-var autorsForEverySong = [['5caf936b9ad545112b4b6258','5caf936b9ad545112b4b6258']];
+var autors = [];
+var autorsForEverySong = [];
 var countOfLoaded = 1;
+var singer = {};
 var formData = new FormData();
 
+function getSinger() {
+
+      $.ajax({
+        url: '/users/sendProfile',
+        method: 'GET',
+        data: {   },
+        success: function(result){
+          singer = result;
+          autors = [singer._id,singer._id];
+          autorsForEverySong = [[singer._id,singer._id]];
+          },
+        error: function(){
+          console.log("error");
+        }
+      });
+}
+
 window.onload = function() {
+  getSinger();
   document.getElementById("addSong").addEventListener("click", addSong);
   document.getElementById("openCreateRelease").addEventListener("click", showCreateRelease);
   document.getElementById("closeCreateRelease").addEventListener("click", closeCreateRelease);
@@ -187,7 +206,7 @@ countOfLoaded = 1;
 Array.prototype.forEach.call(document.getElementsByClassName('song'), add => {
   countOfLoaded++;
 });
-autorsForEverySong.push(['5caf936b9ad545112b4b6258', '5caf936b9ad545112b4b6258']);
+autorsForEverySong.push([singer._id, singer._id]);
 var br = document.createElement("br");
 song.prepend(
    br
