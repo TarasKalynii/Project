@@ -70,9 +70,10 @@ router.patch('/:id',async function (req, res) {
   //sendprofile
     router.get('/sendProfile', checkingSession, async function (req, res) {
         try {
-            const user = await User.findOne({ _id: req.session.user_id});
+            let user = await User.findById(req.session.user_id).select('-email -password').populate({path: 'addedSongIds', populate : { path : 'releasesId', populate : { path : 'autorsIds', select : '-email -password'}}});
             res.send(user);
         } catch (e) {
+          console.log(e);
           res.send("error");
         }
     });

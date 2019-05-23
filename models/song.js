@@ -2,8 +2,8 @@ const { Schema, model } = require('mongoose');
 
 const songSchema = new Schema({
   name: String,
-  autorsIds: [Schema.Types.ObjectId],
-  releasesId: Schema.Types.ObjectId,
+  autorsIds: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  releasesId: { type: Schema.Types.ObjectId, ref: 'Release' },
   order: Number
 });
 

@@ -14,7 +14,7 @@ function getSinger() {
         success: function(result){
           singer = result;
           autors = [singer._id,singer._id];
-          autorsForEverySong = [[singer._id,singer._id]];
+          autorsForEverySong = [autors];
           },
         error: function(){
           console.log("error");
@@ -75,7 +75,18 @@ function createFormData() {
     formData.append("autorsList", autor);
 });
 autorsForEverySong.forEach(function(autorsForSong) {
-  formData.append("autorsForEverySong", autorsForSong);
+  //autorsForSong need to up
+  autors.forEach(function (autor) {
+    autorsForSong.push(autor);
+  });
+  //need unique and push first author
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  var unique = autorsForSong.filter( onlyUnique ); // returns ['a', 1, 2, '1']
+  unique.push(autorsForSong[0]);
+
+  formData.append("autorsForEverySong", unique);
 });
   var nameOfRelease = document.getElementById('nameRelease').value;
   formData.append("nameOfRelease", nameOfRelease);
@@ -206,7 +217,7 @@ countOfLoaded = 1;
 Array.prototype.forEach.call(document.getElementsByClassName('song'), add => {
   countOfLoaded++;
 });
-autorsForEverySong.push([singer._id, singer._id]);
+autorsForEverySong.push(autors);
 var br = document.createElement("br");
 song.prepend(
    br

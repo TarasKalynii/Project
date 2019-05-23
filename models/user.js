@@ -7,10 +7,9 @@ const userSchema = new Schema({
   first_name: String,
   email: String,
   password: String,
-  releasesIds: [Schema.Types.ObjectId],
-  songsIds: [Schema.Types.ObjectId],
-  addReleasesIds : [Schema.Types.ObjectId],
-  addSongsIds: [Schema.Types.ObjectId]
+  releasesIds: [{ type: Schema.Types.ObjectId, ref: 'Release' }],
+  songsIds: [{ type: Schema.Types.ObjectId, ref: 'Song' }],
+  addedSongIds : [{ type: Schema.Types.ObjectId, ref: 'Song' }]
 });
 
 module.exports = model('User', userSchema);

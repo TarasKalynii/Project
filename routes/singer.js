@@ -54,9 +54,6 @@ router.get('/', function (req, res) {
 router.post('/', async function (req, res) {
   //log req
   //console.log(req.files);
-
-
-
   //createRelease
   var nameOfRelease = req.body.nameOfRelease;
   var autorsList = [];
@@ -65,6 +62,7 @@ router.post('/', async function (req, res) {
   });
   var newRelease = await new Release({ name: nameOfRelease });
   var saveNewRelease = await newRelease.save();
+  //for song too
   var updateNewRelease = await Release.findOneAndUpdate(
   { _id: newRelease._id },
   //with each or double my id NE DOPOMOGLO
@@ -77,41 +75,24 @@ router.post('/', async function (req, res) {
 
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   let sampleFile = req.files.image;
-  var dir = './uploads/' + updateNewRelease._id;
+  var dir = './public/uploads/' + updateNewRelease._id;
 
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
   }
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('uploads/' + updateNewRelease._id + '/' + updateNewRelease._id + '.jpg', function(err) {
+  sampleFile.mv('public/uploads/' + updateNewRelease._id + '/' + updateNewRelease._id + '.jpg', function(err) {
     if (err)
       return res.status(500).send(err);
   });
 
-
+// for song too
   for (var i = 1; i < autorsList.length; i++) {
     var updateAutor = await User.findOneAndUpdate(
     { _id: autorsList[i] },
     { $push: { releasesIds: newRelease._id   } }
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   //create song
@@ -137,10 +118,9 @@ if (req.body.orderOfSongs.length == 1) {
   let sampleFile = req.files.songsFileList;
 
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('uploads/' + updateNewRelease._id + '/' + updateNewSong._id + '.mp3', function(err) {
+  sampleFile.mv('public/uploads/' + updateNewRelease._id + '/' + updateNewSong._id + '.mp3', function(err) {
     if (err)
       return res.status(500).send(err);
-
   });
   songsIds.push(updateNewSong._id);
   var updateNewRelease = await Release.findOneAndUpdate(
@@ -155,8 +135,6 @@ if (req.body.orderOfSongs.length == 1) {
     { $push: { songsIds: updateNewSong._id   } }
     );
   }
-
-
 }else {
   for (var i = 0; i < req.body.orderOfSongs.length; i++) {
   Array.prototype.forEach.call(req.body.autorsForEverySong, function (arrayOfId) {
@@ -185,7 +163,7 @@ if (req.body.orderOfSongs.length == 1) {
   let sampleFile = req.files.songsFileList[i];
 
   // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv('uploads/' + updateNewRelease._id + '/' + updateNewSong._id + '.mp3', function(err) {
+  sampleFile.mv('public/uploads/' + updateNewRelease._id + '/' + updateNewSong._id + '.mp3', function(err) {
     if (err)
       return res.status(500).send(err);
 
